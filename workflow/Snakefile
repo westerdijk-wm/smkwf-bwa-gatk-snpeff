@@ -1,37 +1,103 @@
-# Main entrypoint of the workflow.
-# Please follow the best practices:
-# https://snakemake.readthedocs.io/en/stable/snakefiles/best_practices.html,
-# in particular regarding the standardized folder structure mentioned there.
+from snakemake.utils import min_version
+
+min_version("6.10.0")
 
 
-# load configuration
-# -----------------------------------------------------
 configfile: "config/config.yaml"
 
 
-# load rules
-# -----------------------------------------------------
+# declare https://github.com/b-brankovics/bwa-gatk-fasttree-smkwf as a module
+module bwa_gatk_fasttree_smkwf:
+    snakefile:
+        github(
+            "b-brankovics/bwa-gatk-fasttree-smkwf",
+            path="workflow/Snakefile",
+            branch="main",
+        )
+    config:
+        config
+
+
 include: "rules/common.smk"
-include: "rules/process_reads.smk"
 
 
-# optional messages, log and error handling
-# -----------------------------------------------------
-onstart:
-    print("\n--- Analysis started ---\n")
+# use all rules from https://github.com/b-brankovics/bwa-gatk-fasttree-smkwf
+use rule * from bwa_gatk_fasttree_smkwf exclude all
 
 
-onsuccess:
-    print("\n--- Workflow finished! ---\n")
-
-
-onerror:
-    print("\n--- An error occurred! ---\n")
-
-
-# target rules
-# -----------------------------------------------------
 rule all:
-    default_target: True
     input:
-        "results/multiqc/multiqc_report.html",
+        "results/snpeff/all.snvs.selected.vcf",
+    default_target: True
+
+
+rule get_gbk:
+    """
+    Download data from NCBI and place it to correct location
+    """
+    output:
+        gbk="resources/snpeff/{accession}/genes.gbk",
+        snpeff_config="resources/snpeff/{accession}/snpeff.config",
+        zip=temp("resources/datasets/{accession}.zip"),
+        dir=temp(directory("resources/datasets/{accession}")),
+    log:
+        "logs/datasets/{accession}.log",
+    # wildcard_constraints:
+    #     sample=ACCESSION_SAMPLES
+    conda:
+        "envs/ncbi-datasets.yaml"
+    params:
+        accession=ref_id,
+    shell:
+        """
+        datasets download genome accession {wildcards.accession} --include gbff --filename {output.zip} 2>{log}
+        unzip {output.dir}.zip -d {output.dir} 2>>{log}
+        mv {output.dir}/ncbi_dataset/data/{wildcards.accession}/genomic.gbff {output.gbk} 2>>{log}
+        echo "{wildcards.accession}.genome: {wildcards.accession}" >{output.snpeff_config} 2>>{log}
+        """
+
+
+# Rule to create a SnpEff database for each gene
+rule build_snpeff_db:
+    input:
+        gbk="resources/snpeff/{accession}/genes.gbk",
+        snpeff_config="resources/snpeff/{accession}/snpeff.config",
+    output:
+        db="resources/snpeff/{accession}/snpEffectPredictor.bin",
+    log:
+        "logs/snpeff_build_db/{accession}.log",
+    conda:
+        "envs/snpeff.yaml"
+    params:
+        snpeff_dir="resources/snpeff",
+    shell:
+        """
+        snpEff build -c {input.snpeff_config} -dataDir $PWD/{params.snpeff_dir} -genbank -v {wildcards.accession} >>{log} 2>&1
+        """
+
+
+# Annotate the filtered VCF file using SnpEff for each gene
+rule snpeff_annotate_genes:
+    input:
+        vcf="results/filtered/all.snvs.selected.vcf.gz",
+        snpeff_config=f"resources/snpeff/{ref_id}/snpeff.config",
+        db=f"resources/snpeff/{ref_id}/snpEffectPredictor.bin",
+    output:
+        vcf="results/snpeff/all.snvs.selected.vcf",
+        html="results/snpeff/all.snvs.selected_summary.html",
+        csv="results/snpeff/all.snvs.selected_summary.csv",
+    log:
+        "logs/snpeff.log",
+    conda:
+        "envs/snpeff.yaml"
+    params:
+        snpeff_dir="resources/snpeff",
+        ref_id=ref_id,
+    shell:
+        """
+        snpEff -c {input.snpeff_config} -dataDir $PWD/{params.snpeff_dir} {params.ref_id} \
+            -v {input.vcf} \
+            -stats {output.html} \
+            -csvStats {output.csv} \
+            >{output.vcf} 2>{log}
+        """

@@ -1,38 +1,88 @@
-$schema: "https://json-schema.org/draft/2020-12/schema"
+$schema: "http://json-schema.org/draft-04/schema#"
+
+description: snakemake configuration file
+
 type: object
-description: main configuration schema for the workflow
+
 properties:
-  sample_sheet:
+  samples:
     type: string
-    description: path to sample sheet, mandatory
-    default: config/samples.tsv
+  units:
+    type: string
 
-  get_genome:
+  ref:
     type: object
     properties:
-      ncbi_ftp:
+      accession:
         type: string
-        description: URL for genome retrieval from NCBI FTP server
-        default: ""
     required:
-      - ncbi_ftp
+      - accession
 
-  simulate_reads:
+  filtering:
     type: object
     properties:
-      read_length:
-        type: integer
-        description: length of target reads in bp
-        default: 100
-      read_number:
-        type: integer
-        description: number of total reads to be simulated
-        default: 10000
+      vqsr:
+        type: boolean
+      hard:
+        type: object
+        properties:
+          snvs:
+            type: string
+          indels:
+            type: string
+        required:
+          - snvs
+          - indels
     required:
-      - read_length
-      - read_number
+      - vqsr
+      - hard
+
+  processing:
+    type: object
+    properties:
+      remove-duplicates:
+        type: boolean
+      restrict-regions:
+        type: string
+      region-padding:
+        type: integer
+    required:
+      - remove-duplicates
+
+  params:
+    type: object
+    properties:
+      gatk:
+        type: object
+        properties:
+          HaplotypeCaller:
+            type: string
+          BaseRecalibrator:
+            type: string
+          GenotypeGVCFs:
+            type: string
+          VariantRecalibrator:
+            type: string
+        required:
+          - HaplotypeCaller
+          - BaseRecalibrator
+          - GenotypeGVCFs
+          - VariantRecalibrator
+      picard:
+        type: object
+        properties:
+          MarkDuplicates:
+            type: string
+        required:
+          - MarkDuplicates
+    required:
+      - gatk
+      - picard
 
 required:
-  - sample_sheet
-  - get_genome
-  - simulate_reads
+  - samples
+  - units
+  - ref
+  - filtering
+  - processing
+  - params
