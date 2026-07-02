@@ -1,6 +1,4 @@
 sample	unit	platform	fq1	fq2
-CBS11687	1	ILLUMINA	resources/reads/SRR7345539_1.fastq.gz	resources/reads/SRR7345539_2.fastq.gz
-MF46	1	ILLUMINA	resources/reads/SRR7345548_1.fastq.gz	resources/reads/SRR7345548_2.fastq.gz
-MF34	1	ILLUMINA	resources/reads/SRR7514423_1.fastq.gz	resources/reads/SRR7514423_2.fastq.gz
-MF13	1	ILLUMINA	resources/reads/SRR7514425_1.fastq.gz	resources/reads/SRR7514425_2.fastq.gz
-MF54	1	ILLUMINA	resources/reads/SRR7514424_1.fastq.gz	resources/reads/SRR7514424_2.fastq.gz
+CMMS340	1	ILLUMINA	resources/reads/SRR36017306_1.fastq.gz	resources/reads/SRR36017306_2.fastq.gz
+CMMS341	1	ILLUMINA	resources/reads/SRR36017305_1.fastq.gz	resources/reads/SRR36017305_2.fastq.gz
+CMMS342	1	ILLUMINA	resources/reads/SRR36017304_1.fastq.gz	resources/reads/SRR36017304_2.fastq.gz

@@ -173,3 +173,22 @@ def get_vartype_arg(wildcards):
 
 def get_filter(wildcards):
     return {"snv-hard-filter": config["filtering"]["hard"][wildcards.vartype]}
+
+def get_gene_mapping():
+    return config.get("gene_mapping")
+
+def table2results_inputs(wildcards):
+    inputs = {"done": "results/snps_snpeff_batches/.done"}
+    gm = get_gene_mapping()
+    if gm:
+        inputs["gene_map"] = gm
+    return inputs
+
+##### Optional gene mapping #####
+gene_mapping_path = config.get("gene_mapping")
+
+if gene_mapping_path:
+    gene_mapping = pd.read_table(gene_mapping_path, dtype=str)
+    if not gene_mapping.empty:
+        validate(gene_mapping, schema="../schemas/genes.schema.yaml")
+    # else: header-only file, nothing to validate - pass-through mode

@@ -1,0 +1,10 @@
+name: R
+channels:
+  - conda-forge
+dependencies:
+  - r-base
+  - r-readr
+  - r-dplyr
+  - r-tidyr
+  - r-stringr
+  - r-purrr

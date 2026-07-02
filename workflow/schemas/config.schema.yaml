@@ -79,6 +79,9 @@ properties:
       - gatk
       - picard
 
+  gene_mapping:
+    type: string
+
 required:
   - samples
   - units

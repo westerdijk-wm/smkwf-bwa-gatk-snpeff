@@ -1,0 +1,6 @@
+name: genomics
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - bioconda::bcftools

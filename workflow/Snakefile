@@ -28,6 +28,8 @@ use rule * from bwa_gatk_fasttree_smkwf exclude all
 rule all:
     input:
         "results/snpeff/all.snvs.selected.vcf",
+        "results/snpeff/mutation_table_wide.tsv",
+        "results/snpeff/mutation_table_long.tsv",
     default_target: True
 
 
@@ -101,3 +103,31 @@ rule snpeff_annotate_genes:
             -csvStats {output.csv} \
             >{output.vcf} 2>{log}
         """
+
+# Annotation file to SNP .tsv table
+rule snp2tsv_table:
+    input:
+        vcf="results/snpeff/all.snvs.selected.vcf"
+    output:
+        done=touch("results/snps_snpeff_batches/.done")
+    log:
+        "logs/snpeff_annotation_table.log"
+    conda:
+        "envs/bcftools.yaml"
+    script:
+        "scripts/vcf2table.sh"
+
+
+# From table to neat table with Rscript, per gene
+rule table2results:
+    input:
+        unpack(table2results_inputs)
+    output:
+        long="results/snpeff/mutation_table_long.tsv",
+        wide="results/snpeff/mutation_table_wide.tsv",
+    log:
+        "logs/table2results.log",
+    conda:
+        "envs/R.yaml"
+    script:
+        "scripts/summarize_mutations.R"
