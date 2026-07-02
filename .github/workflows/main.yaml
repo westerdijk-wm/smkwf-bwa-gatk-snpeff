@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - Linting
+      - Formatting
     steps:
       - uses: actions/checkout@v6
 
