@@ -50,4 +50,3 @@ params:
       - LoFtool
     # extra command line arguments (e.g. --sift, see docs)
     extra: ""
-
