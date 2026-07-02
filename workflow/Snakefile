@@ -69,7 +69,7 @@ rule build_snpeff_db:
     conda:
         "envs/snpeff.yaml"
     params:
-        snpeff_dir="resources/snpeff",
+        snpeff_dir=lambda w, output: os.path.dirname(os.path.dirname(output.db)),
     shell:
         """
         snpEff build -c {input.snpeff_config} -dataDir $PWD/{params.snpeff_dir} -genbank -v {wildcards.accession} >>{log} 2>&1
@@ -91,7 +91,7 @@ rule snpeff_annotate_genes:
     conda:
         "envs/snpeff.yaml"
     params:
-        snpeff_dir="resources/snpeff",
+        snpeff_dir=lambda w, input: os.path.dirname(os.path.dirname(input.db)),
         ref_id=ref_id,
     shell:
         """
