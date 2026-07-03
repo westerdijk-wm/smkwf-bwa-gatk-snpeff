@@ -110,7 +110,7 @@ rule snp2tsv_table:
     output:
         batches=temp(directory("results/snps_snpeff_batches"))
     log:
-        "logs/snpeff_annotation_table.log"
+        "logs/parse_snpeff/vcf2table.log"
     conda:
         "envs/bcftools.yaml"
     script:
@@ -125,7 +125,7 @@ rule table2results:
         long="results/snpeff/mutation_table_long.tsv",
         wide="results/snpeff/mutation_table_wide.tsv",
     log:
-        "logs/table2results.log",
+        "logs/parse_snpeff/table2results.log",
     conda:
         "envs/R.yaml"
     script:
