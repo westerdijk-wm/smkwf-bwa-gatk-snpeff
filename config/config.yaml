@@ -31,7 +31,7 @@ processing:
 
 params:
   gatk:
-    HaplotypeCaller: "--sample-ploidy 2" # "-ploidy 1"  # for haploid organisms
+    HaplotypeCaller: "--sample-ploidy 1" # "-ploidy 1"  # for haploid organisms
     BaseRecalibrator: "" # Only for known variants
     GenotypeGVCFs: ""
     VariantRecalibrator: ""
