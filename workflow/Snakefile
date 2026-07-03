@@ -103,14 +103,15 @@ rule snpeff_annotate_genes:
             >{output.vcf} 2>{log}
         """
 
+
 # Annotation file to SNP .tsv table
 rule snp2tsv_table:
     input:
-        vcf="results/snpeff/all.snvs.selected.vcf"
+        vcf="results/snpeff/all.snvs.selected.vcf",
     output:
-        batches=temp(directory("results/snps_snpeff_batches"))
+        batches=temp(directory("results/snps_snpeff_batches")),
     log:
-        "logs/parse_snpeff/vcf2table.log"
+        "logs/parse_snpeff/vcf2table.log",
     conda:
         "envs/bcftools.yaml"
     script:
@@ -120,7 +121,7 @@ rule snp2tsv_table:
 # From table to neat table with Rscript, per gene
 rule table2results:
     input:
-        unpack(table2results_inputs)
+        unpack(table2results_inputs),
     output:
         long="results/snpeff/mutation_table_long.tsv",
         wide="results/snpeff/mutation_table_wide.tsv",

@@ -31,6 +31,7 @@ validate(units, schema="../schemas/units.schema.yaml")
 
 ref_id = config["ref"]["accession"]
 
+
 ##### Wildcard constraints #####
 wildcard_constraints:
     vartype="snvs|indels",
@@ -39,6 +40,7 @@ wildcard_constraints:
 
 
 ##### Helper functions #####
+
 
 # contigs in reference genome
 def get_contigs():
@@ -89,9 +91,7 @@ def get_trimmed_reads(wildcards):
     if not is_single_end(**wildcards):
         # paired-end sample
         return expand(
-            "results/trimmed/{sample}-{unit}.{group}.fastq.gz",
-            group=[1, 2],
-            **wildcards
+            "results/trimmed/{sample}-{unit}.{group}.fastq.gz", group=[1, 2], **wildcards
         )
     # single end sample
     return "results/trimmed/{sample}-{unit}.fastq.gz".format(**wildcards)
@@ -174,8 +174,10 @@ def get_vartype_arg(wildcards):
 def get_filter(wildcards):
     return {"snv-hard-filter": config["filtering"]["hard"][wildcards.vartype]}
 
+
 def get_gene_mapping():
     return config.get("gene_mapping")
+
 
 def table2results_inputs(wildcards):
     inputs = {"batches": "results/snps_snpeff_batches"}
@@ -183,6 +185,7 @@ def table2results_inputs(wildcards):
     if gm:
         inputs["gene_map"] = gm
     return inputs
+
 
 ##### Optional gene mapping #####
 gene_mapping_path = config.get("gene_mapping")
