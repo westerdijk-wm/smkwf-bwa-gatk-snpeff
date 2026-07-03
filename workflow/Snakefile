@@ -26,10 +26,10 @@ use rule * from bwa_gatk_fasttree_smkwf exclude all
 
 
 rule all:
+    default_target: True
     input:
         "results/snpeff/all.snvs.selected.vcf",
         "results/snpeff/mutation_table_wide.tsv",
-    default_target: True
 
 
 rule get_gbk:

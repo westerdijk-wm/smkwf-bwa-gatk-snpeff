@@ -9,3 +9,4 @@ dependencies:
   # - bioconda::bcftools
   # - bioconda::picard
   - bioconda::snpeff
+  
