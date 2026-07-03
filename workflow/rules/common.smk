@@ -178,7 +178,7 @@ def get_gene_mapping():
     return config.get("gene_mapping")
 
 def table2results_inputs(wildcards):
-    inputs = {"done": "results/snps_snpeff_batches/.done"}
+    inputs = {"batches": "results/snps_snpeff_batches"}
     gm = get_gene_mapping()
     if gm:
         inputs["gene_map"] = gm

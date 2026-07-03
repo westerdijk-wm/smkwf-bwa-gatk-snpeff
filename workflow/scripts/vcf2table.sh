@@ -16,7 +16,7 @@ set -euo pipefail
 exec > "${snakemake_log[0]}" 2>&1
 
 VCF_FILE="${snakemake_input[vcf]}"
-OUTDIR=$(dirname "${snakemake_output[done]}")
+OUTDIR="${snakemake_output[batches]}"
 
 BATCH_SIZE=25
 OUTPUT_PREFIX="${OUTDIR}/batch"
@@ -200,4 +200,3 @@ for ((i=0; i<${#SAMPLES[@]}; i+=BATCH_SIZE)); do
 done
 
 echo "Finished successfully."
-touch "${snakemake_output[done]}"

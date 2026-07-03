@@ -29,7 +29,6 @@ rule all:
     input:
         "results/snpeff/all.snvs.selected.vcf",
         "results/snpeff/mutation_table_wide.tsv",
-        "results/snpeff/mutation_table_long.tsv",
     default_target: True
 
 
@@ -109,7 +108,7 @@ rule snp2tsv_table:
     input:
         vcf="results/snpeff/all.snvs.selected.vcf"
     output:
-        done=touch("results/snps_snpeff_batches/.done")
+        batches=temp(directory("results/snps_snpeff_batches"))
     log:
         "logs/snpeff_annotation_table.log"
     conda:

@@ -16,7 +16,7 @@ library(purrr)
 ## INPUT / OUTPUT (SNAKEMAKE)
 #############################
 
-input_dir <- dirname(snakemake@input[["done"]])
+input_dir <- snakemake@input[["batches"]]
 gene_map_file <- snakemake@input[["gene_map"]]  # NULL if not declared in the rule
 
 output_long <- snakemake@output[["long"]]
