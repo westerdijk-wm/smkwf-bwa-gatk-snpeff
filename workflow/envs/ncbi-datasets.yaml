@@ -4,4 +4,3 @@ channels:
 dependencies:
   - conda-forge::ncbi-datasets-cli
   - conda-forge::unzip
-  

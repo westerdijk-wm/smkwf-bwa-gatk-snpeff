@@ -3,10 +3,4 @@ channels:
   - conda-forge
   - bioconda
 dependencies:
-  # - bioconda::samtools
-  # - bioconda::gatk4
-  # - bioconda::vcftools
-  # - bioconda::bcftools
-  # - bioconda::picard
   - bioconda::snpeff
-  
