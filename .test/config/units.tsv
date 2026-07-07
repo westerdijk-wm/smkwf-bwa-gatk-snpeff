@@ -1,6 +1,10 @@
 sample	unit	platform	fq1	fq2
-CBS11687	1	ILLUMINA	resources/reads/SRR7345539_1.fastq.gz	resources/reads/SRR7345539_2.fastq.gz
-MF46	1	ILLUMINA	resources/reads/SRR7345548_1.fastq.gz	resources/reads/SRR7345548_2.fastq.gz
-MF34	1	ILLUMINA	resources/reads/SRR7514423_1.fastq.gz	resources/reads/SRR7514423_2.fastq.gz
-MF13	1	ILLUMINA	resources/reads/SRR7514425_1.fastq.gz	resources/reads/SRR7514425_2.fastq.gz
-MF54	1	ILLUMINA	resources/reads/SRR7514424_1.fastq.gz	resources/reads/SRR7514424_2.fastq.gz
+12-7505446	1	ILLUMINA	data/reads/12-7505446_1.fastq.gz	data/reads/12-7505446_2.fastq.gz
+V226-02	1	ILLUMINA	data/reads/V226-02_1.fastq.gz	data/reads/V226-02_2.fastq.gz
+56C17	1	ILLUMINA	data/reads/56C17_1.fastq.gz	data/reads/56C17_2.fastq.gz
+09-7500806	1	ILLUMINA	data/reads/09-7500806_1.fastq.gz	data/reads/09-7500806_2.fastq.gz
+CM7632	1	ILLUMINA	data/reads/CM7632_1.fastq.gz	data/reads/CM7632_2.fastq.gz
+CMMS340	1	ILLUMINA	data/reads/CMMS340_1.fastq.gz	data/reads/CMMS340_2.fastq.gz
+CMMS341	1	ILLUMINA	data/reads/CMMS341_1.fastq.gz	data/reads/CMMS341_2.fastq.gz
+CMMS342	1	ILLUMINA	data/reads/CMMS342_1.fastq.gz	data/reads/CMMS342_2.fastq.gz
+V254-50	1	ILLUMINA	data/reads/V254-50_1.fastq.gz	data/reads/V254-50_2.fastq.gz
