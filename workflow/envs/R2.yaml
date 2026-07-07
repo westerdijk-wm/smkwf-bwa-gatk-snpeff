@@ -1,0 +1,22 @@
+name: R
+channels:
+  - conda-forge
+  - bioconda
+  - b-brankovics
+  - defaults
+dependencies:
+  - conda-forge::r-httpgd
+  - conda-forge::r-kableextra
+  - conda-forge::r-languageserver
+  - conda-forge::r-readr
+  - conda-forge::r-rstudioapi
+  - conda-forge::r-stringr
+  - conda-forge::r-tidyverse
+  - r-yaml==2.3.10
+  - radian
+  - zip
+  - conda-forge::r-writexl
+  - conda-forge::r-argparse
+  - conda-forge::r-pheatmap
+  - conda-forge::r-openxlsx2
+  - tectonic
