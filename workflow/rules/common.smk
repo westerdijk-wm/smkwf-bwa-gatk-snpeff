@@ -31,6 +31,7 @@ validate(units, schema="../schemas/units.schema.yaml")
 
 ref_id = config["ref"]["accession"]
 
+
 ##### Wildcard constraints #####
 wildcard_constraints:
     vartype="snvs|indels",
@@ -40,11 +41,14 @@ wildcard_constraints:
 
 ##### Helper functions #####
 
+
 # contigs in reference genome
 def get_contigs():
     with checkpoints.genome_faidx.get().output[0].open() as fai:
         # return pd.read_table(fai, header=None, usecols=[0], squeeze=True, dtype=str)
-        return pd.read_table(fai, header=None, usecols=[0], dtype=str).squeeze("columns")
+        return pd.read_table(fai, header=None, usecols=[0], dtype=str).squeeze(
+            "columns"
+        )
 
 
 def get_fastq(wildcards):
@@ -91,7 +95,7 @@ def get_trimmed_reads(wildcards):
         return expand(
             "results/trimmed/{sample}-{unit}.{group}.fastq.gz",
             group=[1, 2],
-            **wildcards
+            **wildcards,
         )
     # single end sample
     return "results/trimmed/{sample}-{unit}.fastq.gz".format(**wildcards)
@@ -173,3 +177,25 @@ def get_vartype_arg(wildcards):
 
 def get_filter(wildcards):
     return {"snv-hard-filter": config["filtering"]["hard"][wildcards.vartype]}
+
+
+def get_gene_mapping():
+    return config.get("gene_mapping")
+
+
+def table2results_inputs(wildcards):
+    inputs = {"batches": f"results/snps_snpeff_batches_{wildcards.vartype}"}
+    gm = get_gene_mapping()
+    if gm:
+        inputs["gene_map"] = gm
+    return inputs
+
+
+##### Optional gene mapping #####
+gene_mapping_path = config.get("gene_mapping")
+
+if gene_mapping_path:
+    gene_mapping = pd.read_table(gene_mapping_path, dtype=str)
+    if not gene_mapping.empty:
+        validate(gene_mapping, schema="../schemas/genes.schema.yaml")
+    # else: header-only file, nothing to validate - pass-through mode

@@ -26,9 +26,11 @@ use rule * from bwa_gatk_fasttree_smkwf exclude all
 
 
 rule all:
+    default_target: True
     input:
         "results/snpeff/all.snvs.selected.vcf",
-    default_target: True
+        "results/snpeff/mutation_table_snvs_wide.tsv",
+        "results/snpeff/gene_mutations_indels.tsv",
 
 
 rule get_gbk:
@@ -79,15 +81,15 @@ rule build_snpeff_db:
 # Annotate the filtered VCF file using SnpEff for each gene
 rule snpeff_annotate_genes:
     input:
-        vcf="results/filtered/all.snvs.selected.vcf.gz",
+        vcf="results/filtered/all.{vartype}.selected.vcf.gz",
         snpeff_config=f"resources/snpeff/{ref_id}/snpeff.config",
         db=f"resources/snpeff/{ref_id}/snpEffectPredictor.bin",
     output:
-        vcf="results/snpeff/all.snvs.selected.vcf",
-        html="results/snpeff/all.snvs.selected_summary.html",
-        csv="results/snpeff/all.snvs.selected_summary.csv",
+        vcf="results/snpeff/all.{vartype}.selected.vcf",
+        html="results/snpeff/all.{vartype}.selected_summary.html",
+        csv="results/snpeff/all.{vartype}.selected_summary.csv",
     log:
-        "logs/snpeff.log",
+        "logs/snpeff/{vartype}.log",
     conda:
         "envs/snpeff.yaml"
     params:
@@ -101,3 +103,59 @@ rule snpeff_annotate_genes:
             -csvStats {output.csv} \
             >{output.vcf} 2>{log}
         """
+
+
+# Annotation file to SNP .tsv table
+rule snp2tsv_table:
+    input:
+        vcf="results/snpeff/all.{vartype}.selected.vcf",
+    output:
+        batches=temp(directory("results/snps_snpeff_batches_{vartype}")),
+    log:
+        "logs/parse_snpeff/vcf2table/{vartype}.log",
+    conda:
+        "envs/bcftools.yaml"
+    script:
+        "scripts/vcf2table.sh"
+
+
+rule snp2tsv_table_old:
+    input:
+        vcf="results/snpeff/all.{vartype}.selected.vcf",
+    output:
+        tsv="results/snpeff/all.{vartype}.selected.tsv",
+    log:
+        "logs/parse_snpeff/vcf2table_old/{vartype}.log",
+    conda:
+        "envs/bcftools.yaml"
+    script:
+        "scripts/vcf2table_old.sh"
+
+
+rule table2results_old:
+    input:
+        snpeff="results/snpeff/all.{vartype}.selected.tsv",
+        genes="config/genes.tsv",
+    output:
+        wide="results/snpeff/gene_mutations_{vartype}.tsv",
+    log:
+        "logs/parse_snpeff/table2results_old/{vartype}.log",
+    conda:
+        "envs/R2.yaml"
+    script:
+        "scripts/mutation_correlation.R"
+
+
+# From table to neat table with Rscript, per gene
+rule table2results:
+    input:
+        unpack(table2results_inputs),
+    output:
+        long="results/snpeff/mutation_table_{vartype}_long.tsv",
+        wide="results/snpeff/mutation_table_{vartype}_wide.tsv",
+    log:
+        "logs/parse_snpeff/table2results/{vartype}.log",
+    conda:
+        "envs/R.yaml"
+    script:
+        "scripts/summarize_mutations.R"

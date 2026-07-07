@@ -1,0 +1,15 @@
+$schema: "http://json-schema.org/draft-04/schema#"
+
+description: an entry in the gene mapping sheet (gene_id -> gene_name)
+
+properties:
+  gene_id:
+    type: string
+    description: gene identifier as it appears in the SnpEff/VCF annotation (e.g. locus tag)
+  gene_name:
+    type: string
+    description: human-readable gene name (e.g. actin) - must be unique, becomes a column header in the wide mutation table
+
+required:
+  - gene_id
+  - gene_name

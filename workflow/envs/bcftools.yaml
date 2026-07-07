@@ -1,6 +1,6 @@
-name: snpeff
+name: genomics
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - bioconda::snpeff
+  - bioconda::bcftools
