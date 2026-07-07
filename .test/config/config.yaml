@@ -1,9 +1,10 @@
 samples: config/samples.tsv
 units: config/units.tsv
+gene_mapping: "config/genes.tsv"
 
 ref:
   # NCBI/ENA/DBJ assembly accession, e.g. GCA_000001405.28
-  accession: GCF_000185945.1 #GCF_009017415.1 #
+  accession: GCA_000150145.1 # A1163
 
 filtering:
   # Set to true in order to apply machine learning based recalibration of
