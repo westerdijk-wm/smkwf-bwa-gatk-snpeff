@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.0 (2026-07-08)
+
+
+### Bug Fixes
+
+* cyp51A mutation detection for TR ([fc497ba](https://github.com/westerdijk-wm/smkwf-bwa-gatk-snpeff/commit/fc497baa0dff4ff26a1b1cdecbd5aad41499826e))
+
 ## [1.3.0](https://github.com/snakemake-workflows/snakemake-workflow-template/compare/v1.2.0...v1.3.0) (2026-03-27)
 
 
